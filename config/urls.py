@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
 
+"""
+namespace можно было не прописывать.
+Пространство имён по умолчанию задаётся именем приложения.
+"""
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", RedirectView.as_view(url="mainapp/")),
-    path("mainapp/", include("mainapp.urls", namespace="mainapp")),  # namespce можно было не прописывать.
-    # Пространство имен по умолчанию задается именем приложения.
+    path("mainapp/", include("mainapp.urls", namespace="mainapp")),
 ]
