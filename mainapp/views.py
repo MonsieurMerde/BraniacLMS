@@ -1,6 +1,10 @@
+import json
+import os
 from datetime import datetime
 
 from django.views.generic import TemplateView
+
+from config import settings
 
 
 class MainPageView(TemplateView):
@@ -18,6 +22,13 @@ class NewsPageView(TemplateView):
         context["news_preview"] = "Предварительное описание, которое заинтересует каждого"
         context["range"] = range(5)
         context["datetime_obj"] = datetime.now
+
+        with open(os.path.join(settings.BASE_DIR, f"{settings.STATIC_URL[1:]}news_dict.json")) as file_with_news_dict:
+            context["news_dict"] = json.load(file_with_news_dict)
+
+        with open(os.path.join(settings.BASE_DIR, f"{settings.STATIC_URL[1:]}news_list.json")) as file_with_news_list:
+            context["news_list"] = json.load(file_with_news_list)
+
         return context
 
 
