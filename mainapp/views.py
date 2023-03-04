@@ -1,4 +1,11 @@
+import json
+import os
+from datetime import datetime
+
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
+
+from config import settings
 
 
 class MainPageView(TemplateView):
@@ -7,6 +14,29 @@ class MainPageView(TemplateView):
 
 class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
+
+    def get_context_data(self, **kwargs):
+        # Get all previous data
+        context = super().get_context_data(**kwargs)
+        # Create your own data
+        context["news_title"] = "Громкий новостной заголовок"
+        context["news_preview"] = "Предварительное описание, которое заинтересует каждого"
+        context["range"] = range(5)
+        context["datetime_obj"] = datetime.now
+
+        with open(os.path.join(settings.BASE_DIR, f"{settings.STATIC_URL[1:]}news_dict.json")) as file_with_news_dict:
+            context["news_dict"] = json.load(file_with_news_dict)
+        with open(os.path.join(settings.BASE_DIR, f"{settings.STATIC_URL[1:]}news_list.json")) as file_with_news_list:
+            context["news_list"] = json.load(file_with_news_list)
+
+        return context
+
+
+class NewsWithPaginatorView(NewsPageView):
+    def get_context_data(self, page, **kwargs):
+        context = super().get_context_data(page=page, **kwargs)
+        context["page_num"] = page
+        return context
 
 
 class CoursesPageView(TemplateView):
@@ -23,3 +53,7 @@ class DocSitePageView(TemplateView):
 
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
+
+
+def search_redirect_google(request):
+    return HttpResponseRedirect(f'https://www.google.com/search?q={request.GET["q"]}')
