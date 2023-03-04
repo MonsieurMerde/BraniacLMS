@@ -49,6 +49,15 @@
           </div>
         {% endfor %}
 
+        <div class="card my-2">
+          <div class="card-body">
+            <h5 class="card-title">Тест ссылки с GET-параметром на поиск слова в Google</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ datetime_obj|date:"Y-m-d h-i-s" }}</h6>
+            <p class="card-text">Поисковик <a href="{% url 'mainapp:search_google' %}?q=yandex">Яндекс</a></p>
+            <a href="#" class="card-link">Подробнее</a>
+          </div>
+        </div>
+
       </div>
 
       <div class="col-lg-4">
