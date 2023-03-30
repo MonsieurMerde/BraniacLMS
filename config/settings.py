@@ -114,6 +114,7 @@ AUTH_USER_MODEL = "authapp.CustomUser"
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.github.GithubOAuth2",
     "social_core.backends.vk.VKOAuth2",
+    "authapp.auth.EmailAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
 
