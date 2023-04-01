@@ -115,6 +115,7 @@ AUTHENTICATION_BACKENDS = (
     "social_core.backends.github.GithubOAuth2",
     "social_core.backends.vk.VKOAuth2",
     "authapp.auth.EmailAuthBackend",
+    "authapp.auth.CaseInsensitiveBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
 

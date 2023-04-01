@@ -14,3 +14,14 @@ class EmailAuthBackend(ModelBackend):
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
+
+
+class CaseInsensitiveBackend(ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        try:
+            user = User.objects.get(username=username.lower())
+        except User.DoesNotExist:
+            return None
+        else:
+            if user.check_password(password) and self.user_can_authenticate(user):
+                return user
