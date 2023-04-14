@@ -10,5 +10,8 @@
   <p>
     <div class="text-center text-muted"><small>First 1000 lines of log file</small></div>
     <pre>{{ log }}</pre>
+    <hr style="border-style: dashed;">
+    <div class="text-center text-muted"><small>Last 1000 lines of log file</small></div>
+    <pre>{{ log_reverse }}</pre>
   </p>
 {% endblock content %}

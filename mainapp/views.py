@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView, View
+from file_read_backwards import FileReadBackwards
 
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
@@ -111,6 +112,13 @@ class LogView(TemplateView):
                     break
                 log_slice.insert(0, line)  # append at start
             context["log"] = "".join(log_slice)
+        log_slice_reverse = []
+        with FileReadBackwards(settings.LOG_FILE, encoding="utf-8") as log_file_reverse:
+            for i, line in enumerate(log_file_reverse):
+                if i == 1000:  # last 1000 lines
+                    break
+                log_slice_reverse.append(f"{line}\n")  # append at start
+            context["log_reverse"] = "".join(log_slice_reverse)
         return context
 
 
