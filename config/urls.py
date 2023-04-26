@@ -21,11 +21,11 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 """
-namespace можно было не прописывать.
-Пространство имён по умолчанию задаётся именем приложения.
+Пространство имён (namespace) по умолчанию задаётся именем приложения.
 """
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
     path("", RedirectView.as_view(url="mainapp/")),
     path("social_auth/", include("social_django.urls", namespace="social")),
     path("mainapp/", include("mainapp.urls", namespace="mainapp")),

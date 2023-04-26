@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.http import FileResponse, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -58,10 +59,14 @@ class NewsDeleteView(PermissionRequiredMixin, DeleteView):
 
 class CoursesListView(TemplateView):
     template_name = "mainapp/courses_list.html"
+    paginate_by = 6
 
     def get_context_data(self, **kwargs):
         context = super(CoursesListView, self).get_context_data(**kwargs)
-        context["objects"] = mainapp_models.Courses.objects.all()[:7]
+        context["objects"] = mainapp_models.Courses.objects.all()
+        paginator = Paginator(context["objects"], self.paginate_by)
+        page_num = self.request.GET.get("page", 1)
+        context["page_obj"] = paginator.page(page_num)
         return context
 
 
@@ -90,6 +95,14 @@ class CoursesDetailView(TemplateView):
                 .select_related()
             )
             cache.set(f"feedback_list_{pk}", context["feedback_list"], timeout=300)  # 5 minutes
+
+            # # Archive object for tests --->
+            # import pickle
+
+            # with open(f"mainapp/fixtures/005_feedback_list_{pk}.bin", "wb") as outf:
+            #     pickle.dump(context["feedback_list"], outf)
+            # # <--- Archive object for tests
+
         else:
             context["feedback_list"] = cached_feedback
 
